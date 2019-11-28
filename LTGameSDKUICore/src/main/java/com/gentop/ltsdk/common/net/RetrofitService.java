@@ -1,8 +1,6 @@
 package com.gentop.ltsdk.common.net;
 
 
-
-
 import com.gentop.ltsdk.common.model.BaseEntry;
 import com.gentop.ltsdk.common.model.ResultData;
 
@@ -50,4 +48,26 @@ public interface RetrofitService {
                                     @Header("LT-Token") String LTToken,
                                     @Header("LT-T") int LTTime,
                                     @Body RequestBody requestBody);
+
+    /**
+     * 游客登录验证
+     */
+    @Headers({"Content-Type:application/json",
+            "Accept:application/json"})
+    @POST("/api/auth/login-visitors")
+    Observable<BaseEntry<ResultData>> guestLogin(@Header("LT-AppID") String LTAppID,
+                                     @Header("LT-Token") String LTToken,
+                                     @Header("LT-T") int LTTime,
+                                     @Body Map<String, Object> map);
+
+    /**
+     * 绑定账户
+     */
+    @Headers({"Content-Type:application/json",
+            "Accept:application/json"})
+    @POST("/api/auth/account-bind")
+    Observable<BaseEntry<ResultData>> bindAccount(@Header("LT-AppID") String LTAppID,
+                                      @Header("LT-Token") String LTToken,
+                                      @Header("LT-T") int LTTime,
+                                      @Body Map<String, Object> map);
 }
