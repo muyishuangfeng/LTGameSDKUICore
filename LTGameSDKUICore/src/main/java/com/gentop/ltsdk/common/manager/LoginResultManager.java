@@ -37,15 +37,20 @@ public class LoginResultManager {
      *                  //@param platform    平台
      * @param mListener 接口回调
      */
-    public static void googleLogin(final Context context, String baseUrl, String LTAppID,
+    public static void googleLogin(final Context context, boolean isTestServer, String LTAppID,
                                    String LTAppKey, Map<String, Object> map,
                                    final OnLoginSuccessListener mListener) {
+        String baseUrl = "";
         if (!TextUtils.isEmpty(LTAppID) &&
                 !TextUtils.isEmpty(LTAppKey) &&
-                !TextUtils.isEmpty(baseUrl) &&
                 map != null) {
             long LTTime = System.currentTimeMillis() / 1000L;
             String LTToken = MD5Util.md5Decode("POST" + LTAppID + LTTime + LTAppKey);
+            if (isTestServer) {
+                baseUrl = Api.TEST_SERVER_URL;
+            } else {
+                baseUrl = Api.FORMAL_SERVER_URL;
+            }
             Api.getInstance(baseUrl)
                     .googleLogin(LTAppID, LTToken, (int) LTTime, map)
                     .subscribeOn(Schedulers.io())
@@ -112,15 +117,20 @@ public class LoginResultManager {
      *                  //@param accessToken facebook返回的Token
      * @param mListener 接口回调
      */
-    public static void facebookLogin(final Context context, String baseUrl, String LTAppID,
+    public static void facebookLogin(final Context context, boolean isTestServer, String LTAppID,
                                      String LTAppKey, Map<String, Object> map,
                                      final OnLoginSuccessListener mListener) {
+        String baseUrl = "";
         if (!TextUtils.isEmpty(LTAppID) &&
                 !TextUtils.isEmpty(LTAppKey) &&
                 map != null) {
             long LTTime = System.currentTimeMillis() / 1000L;
             String LTToken = MD5Util.md5Decode("POST" + LTAppID + LTTime + LTAppKey);
-
+            if (isTestServer) {
+                baseUrl = Api.TEST_SERVER_URL;
+            } else {
+                baseUrl = Api.FORMAL_SERVER_URL;
+            }
             Api.getInstance(baseUrl)
                     .faceBookLogin(LTAppID, LTToken, (int) LTTime, map)
                     .subscribeOn(Schedulers.io())
@@ -184,18 +194,23 @@ public class LoginResultManager {
     /**
      * 自动登录验证
      */
-    public static void autoLoginCheck(String baseUrl, String LTAppID, String LTAppKey,
+    public static void autoLoginCheck(boolean isTestServer, String LTAppID, String LTAppKey,
                                       Map<String, Object> params,
                                       final OnAutoLoginCheckListener mListener) {
+        String baseUrl = "";
         if (params != null &&
                 !TextUtils.isEmpty(LTAppID) &&
-                !TextUtils.isEmpty(baseUrl) &&
                 !TextUtils.isEmpty(LTAppKey)) {
             long LTTime = System.currentTimeMillis() / 1000L;
             String LTToken = MD5Util.md5Decode("POST" + LTAppID + LTTime + LTAppKey);
             String json = new Gson().toJson(params);//要传递的json
             final RequestBody requestBody = RequestBody.create(okhttp3.MediaType
                     .parse("application/json; charset=utf-8"), json);
+            if (isTestServer) {
+                baseUrl = Api.TEST_SERVER_URL;
+            } else {
+                baseUrl = Api.FORMAL_SERVER_URL;
+            }
             Api.getInstance(baseUrl)
                     .autoLogin(LTAppID, LTToken, (int) LTTime, requestBody)
                     .subscribeOn(Schedulers.io())
@@ -233,14 +248,20 @@ public class LoginResultManager {
     /**
      * 游客登录验证
      */
-    public static void guestLogin(final Context context, String baseUrl, String LTAppID, String LTAppKey,
+    public static void guestLogin(final Context context, boolean isTestServer, String LTAppID, String LTAppKey,
                                   Map<String, Object> params, final OnLoginSuccessListener mListener) {
+        String baseUrl="";
         if (params != null &&
                 !TextUtils.isEmpty(LTAppID) &&
-                !TextUtils.isEmpty(baseUrl) &&
                 !TextUtils.isEmpty(LTAppKey)) {
             long LTTime = System.currentTimeMillis() / 1000L;
             String LTToken = MD5Util.md5Decode("POST" + LTAppID + LTTime + LTAppKey);
+            if (isTestServer) {
+                baseUrl = Api.TEST_SERVER_URL;
+            } else {
+                baseUrl = Api.FORMAL_SERVER_URL;
+            }
+
             Api.getInstance(baseUrl)
                     .guestLogin(LTAppID, LTToken, (int) LTTime, params)
                     .subscribeOn(Schedulers.io())
@@ -267,7 +288,10 @@ public class LoginResultManager {
                                             PreferencesUtils.putString(context, Constants.USER_LT_UID,
                                                     result.getData().getLt_uid());
                                         }
-
+                                        if (!TextUtils.isEmpty(result.getData().getLt_uid_token())) {
+                                            PreferencesUtils.putString(context, Constants.USER_LT_UID_TOKEN,
+                                                    result.getData().getLt_uid_token());
+                                        }
                                     }
 
                                 } else {
@@ -296,15 +320,22 @@ public class LoginResultManager {
     /**
      * 绑定账户
      */
-    public static void bingAccount(final Context context, String baseUrl, String LTAppID, String LTAppKey,
+    public static void bingAccount(final Context context, boolean isTestServer, String LTAppID, String LTAppKey,
                                    Map<String, Object> params,
                                    final OnLoginSuccessListener mListener) {
+        String baseUrl="";
         if (params != null &&
                 !TextUtils.isEmpty(LTAppID) &&
-                !TextUtils.isEmpty(baseUrl) &&
                 !TextUtils.isEmpty(LTAppKey)) {
             long LTTime = System.currentTimeMillis() / 1000L;
             String LTToken = MD5Util.md5Decode("POST" + LTAppID + LTTime + LTAppKey);
+
+            if (isTestServer) {
+                baseUrl = Api.TEST_SERVER_URL;
+            } else {
+                baseUrl = Api.FORMAL_SERVER_URL;
+            }
+
             Api.getInstance(baseUrl)
                     .bindAccount(LTAppID, LTToken, (int) LTTime, params)
                     .subscribeOn(Schedulers.io())
@@ -331,7 +362,10 @@ public class LoginResultManager {
                                             PreferencesUtils.putString(context, Constants.USER_LT_UID,
                                                     result.getData().getLt_uid());
                                         }
-
+                                        if (!TextUtils.isEmpty(result.getData().getLt_uid_token())) {
+                                            PreferencesUtils.putString(context, Constants.USER_LT_UID_TOKEN,
+                                                    result.getData().getLt_uid_token());
+                                        }
                                     }
 
                                 } else {

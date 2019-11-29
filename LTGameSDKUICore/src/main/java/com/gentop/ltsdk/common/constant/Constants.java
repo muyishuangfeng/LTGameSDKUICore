@@ -13,5 +13,7 @@ public class Constants {
     public static final String USER_UUID = "USER_UUID";
     /***游客标记*/
     public static final String USER_GUEST_FLAG = "USER_GUEST_FLAG";
+    /***绑定标记*/
+    public static final String USER_BIND_FLAG = "USER_BIND_FLAG";
 
 }
