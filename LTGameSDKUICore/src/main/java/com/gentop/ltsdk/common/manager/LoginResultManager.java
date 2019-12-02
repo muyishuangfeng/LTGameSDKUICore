@@ -33,8 +33,6 @@ public class LoginResultManager {
      *
      * @param LTAppID   APPID
      * @param LTAppKey  appKey
-     *                  //@param accessToken google返回的Token
-     *                  //@param platform    平台
      * @param mListener 接口回调
      */
     public static void googleLogin(final Context context, boolean isTestServer, String LTAppID,
