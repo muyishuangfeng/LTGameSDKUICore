@@ -292,9 +292,23 @@ public class LoginResultManager {
                                         }
                                     }
 
-                                } else {
-                                    if (mListener != null) {
-                                        mListener.onFailed(result.getMsg());
+                                } else if (result.getCode() == 403) {
+                                    if (result.getData() != null) {
+                                        if (mListener != null) {
+                                            mListener.onSuccess(result);
+                                        }
+                                        if (!TextUtils.isEmpty(result.getData().getApi_token())) {
+                                            PreferencesUtils.putString(context, Constants.USER_API_TOKEN,
+                                                    result.getData().getApi_token());
+                                        }
+                                        if (!TextUtils.isEmpty(result.getData().getLt_uid())) {
+                                            PreferencesUtils.putString(context, Constants.USER_LT_UID,
+                                                    result.getData().getLt_uid());
+                                        }
+                                        if (!TextUtils.isEmpty(result.getData().getLt_uid_token())) {
+                                            PreferencesUtils.putString(context, Constants.USER_LT_UID_TOKEN,
+                                                    result.getData().getLt_uid_token());
+                                        }
                                     }
                                 }
                             }
@@ -347,7 +361,7 @@ public class LoginResultManager {
                         @Override
                         public void onNext(BaseEntry<ResultData> result) {
                             if (result != null) {
-                                if (result.getCode() == 200 || result.getCode() == 403) {
+                                if (result.getCode() == 200) {
                                     if (result.getData() != null) {
                                         if (mListener != null) {
                                             mListener.onSuccess(result);
@@ -366,6 +380,10 @@ public class LoginResultManager {
                                         }
                                     }
 
+                                } else {
+                                    if (mListener != null) {
+                                        mListener.onFailed(result.getMsg());
+                                    }
                                 }
                             }
                         }
