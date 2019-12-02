@@ -248,7 +248,7 @@ public class LoginResultManager {
      */
     public static void guestLogin(final Context context, boolean isTestServer, String LTAppID, String LTAppKey,
                                   Map<String, Object> params, final OnLoginSuccessListener mListener) {
-        String baseUrl="";
+        String baseUrl = "";
         if (params != null &&
                 !TextUtils.isEmpty(LTAppID) &&
                 !TextUtils.isEmpty(LTAppKey)) {
@@ -321,7 +321,7 @@ public class LoginResultManager {
     public static void bingAccount(final Context context, boolean isTestServer, String LTAppID, String LTAppKey,
                                    Map<String, Object> params,
                                    final OnLoginSuccessListener mListener) {
-        String baseUrl="";
+        String baseUrl = "";
         if (params != null &&
                 !TextUtils.isEmpty(LTAppID) &&
                 !TextUtils.isEmpty(LTAppKey)) {
@@ -347,7 +347,7 @@ public class LoginResultManager {
                         @Override
                         public void onNext(BaseEntry<ResultData> result) {
                             if (result != null) {
-                                if (result.getCode() == 200) {
+                                if (result.getCode() == 200 || result.getCode() == 403) {
                                     if (result.getData() != null) {
                                         if (mListener != null) {
                                             mListener.onSuccess(result);
@@ -366,10 +366,6 @@ public class LoginResultManager {
                                         }
                                     }
 
-                                } else {
-                                    if (mListener != null) {
-                                        mListener.onFailed(result.getMsg());
-                                    }
                                 }
                             }
                         }
