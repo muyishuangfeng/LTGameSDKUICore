@@ -5,9 +5,9 @@ import com.gentop.ltsdk.common.net.retrofit.BaseApiImpl;
 
 public class Api extends BaseApiImpl {
     //测试服务器
-    public static final String TEST_SERVER_URL="http://sdk.aktgo.com";
+    public static final String TEST_SERVER_URL="http://testgco.appcpi.com";
     //正式服务器
-    public static final String FORMAL_SERVER_URL="http://login.gdpgold.com";
+    public static final String FORMAL_SERVER_URL="https://gco.appcpi.com";
 
     private Api(String baseUrl) {
         super(baseUrl);
