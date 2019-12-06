@@ -310,6 +310,10 @@ public class LoginResultManager {
                                                     result.getData().getLt_uid_token());
                                         }
                                     }
+                                }else {
+                                    if (mListener != null) {
+                                        mListener.onFailed(result.getMsg());
+                                    }
                                 }
                             }
                         }
