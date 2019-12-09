@@ -13,6 +13,9 @@ public class ResultData {
     private String lt_order_id;
     //错误信息
     private String errorMsg;
+    //登录类型
+    private String loginType;
+
 
     public String getAuth_code() {
         return auth_code;
@@ -62,6 +65,14 @@ public class ResultData {
         this.errorMsg = errorMsg;
     }
 
+    public String getLoginType() {
+        return loginType;
+    }
+
+    public void setLoginType(String loginType) {
+        this.loginType = loginType;
+    }
+
     @Override
     public String toString() {
         return "ResultData{" +
@@ -71,6 +82,7 @@ public class ResultData {
                 ", lt_uid_token='" + lt_uid_token + '\'' +
                 ", lt_order_id='" + lt_order_id + '\'' +
                 ", errorMsg='" + errorMsg + '\'' +
+                ", loginType='" + loginType + '\'' +
                 '}';
     }
 }
