@@ -70,4 +70,15 @@ public interface RetrofitService {
                                       @Header("LT-Token") String LTToken,
                                       @Header("LT-T") int LTTime,
                                       @Body Map<String, Object> map);
+
+    /**
+     * 解绑账户
+     */
+    @Headers({"Content-Type:application/json",
+            "Accept:application/json"})
+    @POST("/api/auth/login-visitors-unbind")
+    Observable<BaseEntry<ResultData>> unBindAccount(@Header("LT-AppID") String LTAppID,
+                                                     @Header("LT-Token") String LTToken,
+                                                     @Header("LT-T") int LTTime,
+                                                     @Body Map<String, String> map);
 }

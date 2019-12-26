@@ -1,7 +1,9 @@
 package com.gentop.ltsdk.common.manager;
 
+import android.app.Activity;
 import android.content.Context;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.gentop.ltsdk.common.constant.Constants;
 import com.gentop.ltsdk.common.impl.OnAutoLoginCheckListener;
@@ -15,6 +17,7 @@ import com.gentop.ltsdk.common.util.PreferencesUtils;
 import com.google.gson.Gson;
 
 import java.util.Map;
+import java.util.WeakHashMap;
 
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -310,7 +313,7 @@ public class LoginResultManager {
                                                     result.getData().getLt_uid_token());
                                         }
                                     }
-                                }else {
+                                } else {
                                     if (mListener != null) {
                                         mListener.onFailed(result.getMsg());
                                     }
@@ -406,5 +409,79 @@ public class LoginResultManager {
                     });
         }
     }
+
+    /**
+     * 解绑
+     */
+    public static void unBingAccount(final Context context, boolean isTestServer, String LTAppID, String LTAppKey,
+                                     Map<String, String> params,
+                                     final OnLoginSuccessListener mListener) {
+        String baseUrl = "";
+        if (params != null &&
+                !TextUtils.isEmpty(LTAppID) &&
+                !TextUtils.isEmpty(LTAppKey)) {
+            long LTTime = System.currentTimeMillis() / 1000L;
+            String LTToken = MD5Util.md5Decode("POST" + LTAppID + LTTime + LTAppKey);
+
+            if (isTestServer) {
+                baseUrl = Api.TEST_SERVER_URL;
+            } else {
+                baseUrl = Api.FORMAL_SERVER_URL;
+            }
+            Api.getInstance(baseUrl)
+                    .unBindAccount(LTAppID, LTToken, (int) LTTime, params)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Observer<BaseEntry<ResultData>>() {
+                        @Override
+                        public void onSubscribe(Disposable d) {
+
+                        }
+
+                        @Override
+                        public void onNext(BaseEntry<ResultData> result) {
+                            if (result != null) {
+                                if (result.getCode() == 200) {
+                                    if (result.getData() != null) {
+                                        if (mListener != null) {
+                                            mListener.onSuccess(result);
+                                        }
+                                        if (!TextUtils.isEmpty(result.getData().getApi_token())) {
+                                            PreferencesUtils.putString(context, Constants.USER_API_TOKEN,
+                                                    result.getData().getApi_token());
+                                        }
+                                        if (!TextUtils.isEmpty(result.getData().getLt_uid())) {
+                                            PreferencesUtils.putString(context, Constants.USER_LT_UID,
+                                                    result.getData().getLt_uid());
+                                        }
+                                        if (!TextUtils.isEmpty(result.getData().getLt_uid_token())) {
+                                            PreferencesUtils.putString(context, Constants.USER_LT_UID_TOKEN,
+                                                    result.getData().getLt_uid_token());
+                                        }
+                                    }
+
+                                } else {
+                                    if (mListener != null) {
+                                        mListener.onFailed(result.getMsg());
+                                    }
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            if (mListener != null) {
+                                mListener.onFailed(ExceptionHelper.handleException(e));
+                            }
+                        }
+
+                        @Override
+                        public void onComplete() {
+
+                        }
+                    });
+        }
+    }
+
 
 }
