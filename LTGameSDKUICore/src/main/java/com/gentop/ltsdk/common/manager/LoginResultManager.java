@@ -300,6 +300,8 @@ public class LoginResultManager {
                                         if (mListener != null) {
                                             mListener.onSuccess(result);
                                         }
+                                        PreferencesUtils.putString(context, Constants.USER_BIND_FLAG,
+                                                "2");
                                         if (!TextUtils.isEmpty(result.getData().getApi_token())) {
                                             PreferencesUtils.putString(context, Constants.USER_API_TOKEN,
                                                     result.getData().getApi_token());
