@@ -1,9 +1,7 @@
 package com.gentop.ltsdk.common.manager;
 
-import android.app.Activity;
 import android.content.Context;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.gentop.ltsdk.common.constant.Constants;
 import com.gentop.ltsdk.common.impl.OnAutoLoginCheckListener;
@@ -17,7 +15,6 @@ import com.gentop.ltsdk.common.util.PreferencesUtils;
 import com.google.gson.Gson;
 
 import java.util.Map;
-import java.util.WeakHashMap;
 
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -68,16 +65,7 @@ public class LoginResultManager {
                                 if (result.getCode() == 200) {
                                     if (result.getData() != null) {
                                         if (mListener != null) {
-                                            int code = 0;
-                                            BaseEntry<ResultData> baseEntry = new BaseEntry<>();
-                                            baseEntry.setResult(result.getResult());
-                                            if (result.getData().getLt_type().equals("register")) {
-                                                code = Constants.USER_REGISTER_GOOGLE_CODE;
-                                            }
-                                            baseEntry.setCode(code);
-                                            baseEntry.setData(result.getData());
-                                            baseEntry.setMsg(result.getMsg());
-                                            mListener.onSuccess(baseEntry);
+                                            mListener.onSuccess(result);
                                         }
                                         if (!TextUtils.isEmpty(result.getData().getApi_token())) {
                                             PreferencesUtils.putString(context, Constants.USER_API_TOKEN,
@@ -157,16 +145,7 @@ public class LoginResultManager {
                                 if (result.getCode() == 200) {
                                     if (result.getData() != null) {
                                         if (mListener != null) {
-                                            int code = 0;
-                                            BaseEntry<ResultData> baseEntry = new BaseEntry<>();
-                                            baseEntry.setResult(result.getResult());
-                                            if (result.getData().getLt_type().equals("register")) {
-                                                code = Constants.USER_REGISTER_FACEBOOK_CODE;
-                                            }
-                                            baseEntry.setCode(code);
-                                            baseEntry.setData(result.getData());
-                                            baseEntry.setMsg(result.getMsg());
-                                            mListener.onSuccess(baseEntry);
+                                            mListener.onSuccess(result);
                                         }
                                         if (!TextUtils.isEmpty(result.getData().getApi_token())) {
                                             PreferencesUtils.putString(context, Constants.USER_API_TOKEN,
@@ -297,16 +276,7 @@ public class LoginResultManager {
                                 if (result.getCode() == 200) {
                                     if (result.getData() != null) {
                                         if (mListener != null) {
-                                            int code = 0;
-                                            BaseEntry<ResultData> baseEntry = new BaseEntry<>();
-                                            baseEntry.setResult(result.getResult());
-                                            if (result.getData().getLt_type().equals("register")) {
-                                                code = Constants.USER_REGISTER_GUEST_CODE;
-                                            }
-                                            baseEntry.setCode(code);
-                                            baseEntry.setData(result.getData());
-                                            baseEntry.setMsg(result.getMsg());
-                                            mListener.onSuccess(baseEntry);
+                                            mListener.onSuccess(result);
                                         }
                                         if (!TextUtils.isEmpty(result.getData().getApi_token())) {
                                             PreferencesUtils.putString(context, Constants.USER_API_TOKEN,
