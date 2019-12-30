@@ -11,4 +11,6 @@ public interface OnLoginSuccessListener {
     void onFailed(String code);
 
     void onParameterError(String result);
+
+    void onAlreadyBind();
 }

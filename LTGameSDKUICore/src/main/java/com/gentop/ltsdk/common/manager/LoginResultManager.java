@@ -39,7 +39,7 @@ public class LoginResultManager {
      * @param mListener 接口回调
      */
     public static void googleLogin(final Context context, boolean isTestServer, String LTAppID,
-                                   String LTAppKey, Map<String, Object> map,
+                                   String LTAppKey,String mAdID, Map<String, Object> map,
                                    final OnLoginSuccessListener mListener) {
         String baseUrl = "";
         if (!TextUtils.isEmpty(LTAppID) &&
@@ -53,7 +53,7 @@ public class LoginResultManager {
                 baseUrl = Api.FORMAL_SERVER_URL;
             }
             Api.getInstance(baseUrl)
-                    .googleLogin(LTAppID, LTToken, (int) LTTime, map)
+                    .googleLogin(LTAppID, LTToken, (int) LTTime, mAdID,map)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Observer<BaseEntry<ResultData>>() {
@@ -68,7 +68,16 @@ public class LoginResultManager {
                                 if (result.getCode() == 200) {
                                     if (result.getData() != null) {
                                         if (mListener != null) {
-                                            mListener.onSuccess(result);
+                                            int code = 0;
+                                            BaseEntry<ResultData> baseEntry = new BaseEntry<>();
+                                            baseEntry.setResult(result.getResult());
+                                            if (result.getData().getLt_type().equals("register")) {
+                                                code = Constants.USER_REGISTER_GOOGLE_CODE;
+                                            }
+                                            baseEntry.setCode(code);
+                                            baseEntry.setData(result.getData());
+                                            baseEntry.setMsg(result.getMsg());
+                                            mListener.onSuccess(baseEntry);
                                         }
                                         if (!TextUtils.isEmpty(result.getData().getApi_token())) {
                                             PreferencesUtils.putString(context, Constants.USER_API_TOKEN,
@@ -119,7 +128,7 @@ public class LoginResultManager {
      * @param mListener 接口回调
      */
     public static void facebookLogin(final Context context, boolean isTestServer, String LTAppID,
-                                     String LTAppKey, Map<String, Object> map,
+                                     String LTAppKey,String mAdID, Map<String, Object> map,
                                      final OnLoginSuccessListener mListener) {
         String baseUrl = "";
         if (!TextUtils.isEmpty(LTAppID) &&
@@ -133,7 +142,7 @@ public class LoginResultManager {
                 baseUrl = Api.FORMAL_SERVER_URL;
             }
             Api.getInstance(baseUrl)
-                    .faceBookLogin(LTAppID, LTToken, (int) LTTime, map)
+                    .faceBookLogin(LTAppID, LTToken, (int) LTTime,mAdID, map)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Observer<BaseEntry<ResultData>>() {
@@ -148,7 +157,16 @@ public class LoginResultManager {
                                 if (result.getCode() == 200) {
                                     if (result.getData() != null) {
                                         if (mListener != null) {
-                                            mListener.onSuccess(result);
+                                            int code = 0;
+                                            BaseEntry<ResultData> baseEntry = new BaseEntry<>();
+                                            baseEntry.setResult(result.getResult());
+                                            if (result.getData().getLt_type().equals("register")) {
+                                                code = Constants.USER_REGISTER_FACEBOOK_CODE;
+                                            }
+                                            baseEntry.setCode(code);
+                                            baseEntry.setData(result.getData());
+                                            baseEntry.setMsg(result.getMsg());
+                                            mListener.onSuccess(baseEntry);
                                         }
                                         if (!TextUtils.isEmpty(result.getData().getApi_token())) {
                                             PreferencesUtils.putString(context, Constants.USER_API_TOKEN,
@@ -196,6 +214,7 @@ public class LoginResultManager {
      * 自动登录验证
      */
     public static void autoLoginCheck(boolean isTestServer, String LTAppID, String LTAppKey,
+                                      String mAdID,
                                       Map<String, Object> params,
                                       final OnAutoLoginCheckListener mListener) {
         String baseUrl = "";
@@ -213,7 +232,7 @@ public class LoginResultManager {
                 baseUrl = Api.FORMAL_SERVER_URL;
             }
             Api.getInstance(baseUrl)
-                    .autoLogin(LTAppID, LTToken, (int) LTTime, requestBody)
+                    .autoLogin(LTAppID, LTToken, (int) LTTime, mAdID,requestBody)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Observer<BaseEntry>() {
@@ -250,6 +269,7 @@ public class LoginResultManager {
      * 游客登录验证
      */
     public static void guestLogin(final Context context, boolean isTestServer, String LTAppID, String LTAppKey,
+                                  String mAdID,
                                   Map<String, Object> params, final OnLoginSuccessListener mListener) {
         String baseUrl = "";
         if (params != null &&
@@ -264,7 +284,7 @@ public class LoginResultManager {
             }
 
             Api.getInstance(baseUrl)
-                    .guestLogin(LTAppID, LTToken, (int) LTTime, params)
+                    .guestLogin(LTAppID, LTToken, (int) LTTime,mAdID, params)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Observer<BaseEntry<ResultData>>() {
@@ -279,7 +299,16 @@ public class LoginResultManager {
                                 if (result.getCode() == 200) {
                                     if (result.getData() != null) {
                                         if (mListener != null) {
-                                            mListener.onSuccess(result);
+                                            int code = 0;
+                                            BaseEntry<ResultData> baseEntry = new BaseEntry<>();
+                                            baseEntry.setResult(result.getResult());
+                                            if (result.getData().getLt_type().equals("register")) {
+                                                code = Constants.USER_REGISTER_GUEST_CODE;
+                                            }
+                                            baseEntry.setCode(code);
+                                            baseEntry.setData(result.getData());
+                                            baseEntry.setMsg(result.getMsg());
+                                            mListener.onSuccess(baseEntry);
                                         }
                                         if (!TextUtils.isEmpty(result.getData().getApi_token())) {
                                             PreferencesUtils.putString(context, Constants.USER_API_TOKEN,
@@ -295,25 +324,9 @@ public class LoginResultManager {
                                         }
                                     }
 
-                                } else if (result.getCode() == 403) {
-                                    if (result.getData() != null) {
-                                        if (mListener != null) {
-                                            mListener.onSuccess(result);
-                                        }
-                                        PreferencesUtils.putString(context, Constants.USER_BIND_FLAG,
-                                                "2");
-                                        if (!TextUtils.isEmpty(result.getData().getApi_token())) {
-                                            PreferencesUtils.putString(context, Constants.USER_API_TOKEN,
-                                                    result.getData().getApi_token());
-                                        }
-                                        if (!TextUtils.isEmpty(result.getData().getLt_uid())) {
-                                            PreferencesUtils.putString(context, Constants.USER_LT_UID,
-                                                    result.getData().getLt_uid());
-                                        }
-                                        if (!TextUtils.isEmpty(result.getData().getLt_uid_token())) {
-                                            PreferencesUtils.putString(context, Constants.USER_LT_UID_TOKEN,
-                                                    result.getData().getLt_uid_token());
-                                        }
+                                } else if (result.getCode() == 431) {//已经绑定
+                                    if (mListener != null) {
+                                        mListener.onAlreadyBind();
                                     }
                                 } else {
                                     if (mListener != null) {
@@ -342,6 +355,7 @@ public class LoginResultManager {
      * 绑定账户
      */
     public static void bingAccount(final Context context, boolean isTestServer, String LTAppID, String LTAppKey,
+                                   String mAdID,
                                    Map<String, Object> params,
                                    final OnLoginSuccessListener mListener) {
         String baseUrl = "";
@@ -358,7 +372,7 @@ public class LoginResultManager {
             }
 
             Api.getInstance(baseUrl)
-                    .bindAccount(LTAppID, LTToken, (int) LTTime, params)
+                    .bindAccount(LTAppID, LTToken, (int) LTTime, mAdID,params)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Observer<BaseEntry<ResultData>>() {
@@ -416,6 +430,7 @@ public class LoginResultManager {
      * 解绑
      */
     public static void unBingAccount(final Context context, boolean isTestServer, String LTAppID, String LTAppKey,
+                                     String mAdID,
                                      Map<String, String> params,
                                      final OnLoginSuccessListener mListener) {
         String baseUrl = "";
@@ -431,7 +446,7 @@ public class LoginResultManager {
                 baseUrl = Api.FORMAL_SERVER_URL;
             }
             Api.getInstance(baseUrl)
-                    .unBindAccount(LTAppID, LTToken, (int) LTTime, params)
+                    .unBindAccount(LTAppID, LTToken, (int) LTTime,mAdID, params)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Observer<BaseEntry<ResultData>>() {

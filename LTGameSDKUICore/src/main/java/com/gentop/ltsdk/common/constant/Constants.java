@@ -16,4 +16,13 @@ public class Constants {
     /***绑定标记*/
     public static final String USER_BIND_FLAG = "USER_BIND_FLAG";
 
+
+    private static final int BASE_CODE = 0X001;
+    /***Facebook注册*/
+    public static final int USER_REGISTER_FACEBOOK_CODE = BASE_CODE + 20;
+    /***Google注册*/
+    public static final int USER_REGISTER_GOOGLE_CODE = BASE_CODE + 21;
+    /***游客注册*/
+    public static final int USER_REGISTER_GUEST_CODE = BASE_CODE + 22;
+
 }

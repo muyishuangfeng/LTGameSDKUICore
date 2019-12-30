@@ -25,6 +25,7 @@ public interface RetrofitService {
     Observable<BaseEntry<ResultData>> googleLogin(@Header("LT-AppID") String LTAppID,
                                                   @Header("LT-Token") String LTToken,
                                                   @Header("LT-T") int LTTime,
+                                                  @Header("adid") String adid,
                                                   @Body Map<String, Object> map);
 
     /**
@@ -36,6 +37,7 @@ public interface RetrofitService {
     Observable<BaseEntry<ResultData>> faceBookLogin(@Header("LT-AppID") String LTAppID,
                                                     @Header("LT-Token") String LTToken,
                                                     @Header("LT-T") int LTTime,
+                                                    @Header("adid") String adid,
                                                     @Body Map<String, Object> map);
 
     /**
@@ -47,6 +49,7 @@ public interface RetrofitService {
     Observable<BaseEntry> autoLogin(@Header("LT-AppID") String LTAppID,
                                     @Header("LT-Token") String LTToken,
                                     @Header("LT-T") int LTTime,
+                                    @Header("adid") String adid,
                                     @Body RequestBody requestBody);
 
     /**
@@ -56,9 +59,10 @@ public interface RetrofitService {
             "Accept:application/json"})
     @POST("/api/auth/login-visitors")
     Observable<BaseEntry<ResultData>> guestLogin(@Header("LT-AppID") String LTAppID,
-                                     @Header("LT-Token") String LTToken,
-                                     @Header("LT-T") int LTTime,
-                                     @Body Map<String, Object> map);
+                                                 @Header("LT-Token") String LTToken,
+                                                 @Header("LT-T") int LTTime,
+                                                 @Header("adid") String adid,
+                                                 @Body Map<String, Object> map);
 
     /**
      * 绑定账户
@@ -67,9 +71,10 @@ public interface RetrofitService {
             "Accept:application/json"})
     @POST("/api/auth/login-visitors-bind")
     Observable<BaseEntry<ResultData>> bindAccount(@Header("LT-AppID") String LTAppID,
-                                      @Header("LT-Token") String LTToken,
-                                      @Header("LT-T") int LTTime,
-                                      @Body Map<String, Object> map);
+                                                  @Header("LT-Token") String LTToken,
+                                                  @Header("LT-T") int LTTime,
+                                                  @Header("adid") String adid,
+                                                  @Body Map<String, Object> map);
 
     /**
      * 解绑账户
@@ -78,7 +83,8 @@ public interface RetrofitService {
             "Accept:application/json"})
     @POST("/api/auth/login-visitors-unbind")
     Observable<BaseEntry<ResultData>> unBindAccount(@Header("LT-AppID") String LTAppID,
-                                                     @Header("LT-Token") String LTToken,
-                                                     @Header("LT-T") int LTTime,
-                                                     @Body Map<String, String> map);
+                                                    @Header("LT-Token") String LTToken,
+                                                    @Header("LT-T") int LTTime,
+                                                    @Header("adid") String adid,
+                                                    @Body Map<String, String> map);
 }
