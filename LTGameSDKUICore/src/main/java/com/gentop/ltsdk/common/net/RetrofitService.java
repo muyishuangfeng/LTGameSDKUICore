@@ -26,6 +26,7 @@ public interface RetrofitService {
                                                   @Header("LT-Token") String LTToken,
                                                   @Header("LT-T") int LTTime,
                                                   @Header("adid") String adid,
+                                                  @Header("platform") int platform,
                                                   @Body Map<String, Object> map);
 
     /**
@@ -38,6 +39,7 @@ public interface RetrofitService {
                                                     @Header("LT-Token") String LTToken,
                                                     @Header("LT-T") int LTTime,
                                                     @Header("adid") String adid,
+                                                    @Header("platform") int platform,
                                                     @Body Map<String, Object> map);
 
     /**
@@ -50,6 +52,7 @@ public interface RetrofitService {
                                     @Header("LT-Token") String LTToken,
                                     @Header("LT-T") int LTTime,
                                     @Header("adid") String adid,
+                                    @Header("platform") int platform,
                                     @Body RequestBody requestBody);
 
     /**
@@ -62,6 +65,7 @@ public interface RetrofitService {
                                                  @Header("LT-Token") String LTToken,
                                                  @Header("LT-T") int LTTime,
                                                  @Header("adid") String adid,
+                                                 @Header("platform") int platform,
                                                  @Body Map<String, Object> map);
 
     /**
@@ -74,6 +78,7 @@ public interface RetrofitService {
                                                   @Header("LT-Token") String LTToken,
                                                   @Header("LT-T") int LTTime,
                                                   @Header("adid") String adid,
+                                                  @Header("platform") int platform,
                                                   @Body Map<String, Object> map);
 
     /**
@@ -86,5 +91,6 @@ public interface RetrofitService {
                                                     @Header("LT-Token") String LTToken,
                                                     @Header("LT-T") int LTTime,
                                                     @Header("adid") String adid,
+                                                    @Header("platform") int platform,
                                                     @Body Map<String, String> map);
 }

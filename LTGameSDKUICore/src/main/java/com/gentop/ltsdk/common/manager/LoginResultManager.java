@@ -53,7 +53,7 @@ public class LoginResultManager {
                 baseUrl = Api.FORMAL_SERVER_URL;
             }
             Api.getInstance(baseUrl)
-                    .googleLogin(LTAppID, LTToken, (int) LTTime, mAdID,map)
+                    .googleLogin(LTAppID, LTToken, (int) LTTime, mAdID,2,map)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Observer<BaseEntry<ResultData>>() {
@@ -142,7 +142,7 @@ public class LoginResultManager {
                 baseUrl = Api.FORMAL_SERVER_URL;
             }
             Api.getInstance(baseUrl)
-                    .faceBookLogin(LTAppID, LTToken, (int) LTTime,mAdID, map)
+                    .faceBookLogin(LTAppID, LTToken, (int) LTTime,mAdID, 2,map)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Observer<BaseEntry<ResultData>>() {
@@ -232,7 +232,7 @@ public class LoginResultManager {
                 baseUrl = Api.FORMAL_SERVER_URL;
             }
             Api.getInstance(baseUrl)
-                    .autoLogin(LTAppID, LTToken, (int) LTTime, mAdID,requestBody)
+                    .autoLogin(LTAppID, LTToken, (int) LTTime, mAdID,2,requestBody)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Observer<BaseEntry>() {
@@ -284,7 +284,7 @@ public class LoginResultManager {
             }
 
             Api.getInstance(baseUrl)
-                    .guestLogin(LTAppID, LTToken, (int) LTTime,mAdID, params)
+                    .guestLogin(LTAppID, LTToken, (int) LTTime,mAdID,2, params)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Observer<BaseEntry<ResultData>>() {
@@ -372,7 +372,7 @@ public class LoginResultManager {
             }
 
             Api.getInstance(baseUrl)
-                    .bindAccount(LTAppID, LTToken, (int) LTTime, mAdID,params)
+                    .bindAccount(LTAppID, LTToken, (int) LTTime, mAdID,2,params)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Observer<BaseEntry<ResultData>>() {
@@ -446,7 +446,7 @@ public class LoginResultManager {
                 baseUrl = Api.FORMAL_SERVER_URL;
             }
             Api.getInstance(baseUrl)
-                    .unBindAccount(LTAppID, LTToken, (int) LTTime,mAdID, params)
+                    .unBindAccount(LTAppID, LTToken, (int) LTTime,mAdID, 2,params)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Observer<BaseEntry<ResultData>>() {
