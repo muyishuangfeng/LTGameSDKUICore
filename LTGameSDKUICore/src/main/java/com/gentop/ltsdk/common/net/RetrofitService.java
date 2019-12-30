@@ -25,8 +25,6 @@ public interface RetrofitService {
     Observable<BaseEntry<ResultData>> googleLogin(@Header("LT-AppID") String LTAppID,
                                                   @Header("LT-Token") String LTToken,
                                                   @Header("LT-T") int LTTime,
-                                                  @Header("adid") String adid,
-                                                  @Header("platform") int platform,
                                                   @Body Map<String, Object> map);
 
     /**
@@ -38,8 +36,6 @@ public interface RetrofitService {
     Observable<BaseEntry<ResultData>> faceBookLogin(@Header("LT-AppID") String LTAppID,
                                                     @Header("LT-Token") String LTToken,
                                                     @Header("LT-T") int LTTime,
-                                                    @Header("adid") String adid,
-                                                    @Header("platform") int platform,
                                                     @Body Map<String, Object> map);
 
     /**
@@ -51,8 +47,6 @@ public interface RetrofitService {
     Observable<BaseEntry> autoLogin(@Header("LT-AppID") String LTAppID,
                                     @Header("LT-Token") String LTToken,
                                     @Header("LT-T") int LTTime,
-                                    @Header("adid") String adid,
-                                    @Header("platform") int platform,
                                     @Body RequestBody requestBody);
 
     /**
@@ -64,8 +58,6 @@ public interface RetrofitService {
     Observable<BaseEntry<ResultData>> guestLogin(@Header("LT-AppID") String LTAppID,
                                                  @Header("LT-Token") String LTToken,
                                                  @Header("LT-T") int LTTime,
-                                                 @Header("adid") String adid,
-                                                 @Header("platform") int platform,
                                                  @Body Map<String, Object> map);
 
     /**
@@ -77,8 +69,6 @@ public interface RetrofitService {
     Observable<BaseEntry<ResultData>> bindAccount(@Header("LT-AppID") String LTAppID,
                                                   @Header("LT-Token") String LTToken,
                                                   @Header("LT-T") int LTTime,
-                                                  @Header("adid") String adid,
-                                                  @Header("platform") int platform,
                                                   @Body Map<String, Object> map);
 
     /**
@@ -90,7 +80,5 @@ public interface RetrofitService {
     Observable<BaseEntry<ResultData>> unBindAccount(@Header("LT-AppID") String LTAppID,
                                                     @Header("LT-Token") String LTToken,
                                                     @Header("LT-T") int LTTime,
-                                                    @Header("adid") String adid,
-                                                    @Header("platform") int platform,
                                                     @Body Map<String, String> map);
 }

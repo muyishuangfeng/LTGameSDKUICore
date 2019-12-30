@@ -39,7 +39,7 @@ public class LoginResultManager {
      * @param mListener 接口回调
      */
     public static void googleLogin(final Context context, boolean isTestServer, String LTAppID,
-                                   String LTAppKey,String mAdID, Map<String, Object> map,
+                                   String LTAppKey, Map<String, Object> map,
                                    final OnLoginSuccessListener mListener) {
         String baseUrl = "";
         if (!TextUtils.isEmpty(LTAppID) &&
@@ -53,7 +53,7 @@ public class LoginResultManager {
                 baseUrl = Api.FORMAL_SERVER_URL;
             }
             Api.getInstance(baseUrl)
-                    .googleLogin(LTAppID, LTToken, (int) LTTime, mAdID,2,map)
+                    .googleLogin(LTAppID, LTToken, (int) LTTime, map)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Observer<BaseEntry<ResultData>>() {
@@ -128,7 +128,7 @@ public class LoginResultManager {
      * @param mListener 接口回调
      */
     public static void facebookLogin(final Context context, boolean isTestServer, String LTAppID,
-                                     String LTAppKey,String mAdID, Map<String, Object> map,
+                                     String LTAppKey, Map<String, Object> map,
                                      final OnLoginSuccessListener mListener) {
         String baseUrl = "";
         if (!TextUtils.isEmpty(LTAppID) &&
@@ -142,7 +142,7 @@ public class LoginResultManager {
                 baseUrl = Api.FORMAL_SERVER_URL;
             }
             Api.getInstance(baseUrl)
-                    .faceBookLogin(LTAppID, LTToken, (int) LTTime,mAdID, 2,map)
+                    .faceBookLogin(LTAppID, LTToken, (int) LTTime, map)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Observer<BaseEntry<ResultData>>() {
@@ -214,7 +214,6 @@ public class LoginResultManager {
      * 自动登录验证
      */
     public static void autoLoginCheck(boolean isTestServer, String LTAppID, String LTAppKey,
-                                      String mAdID,
                                       Map<String, Object> params,
                                       final OnAutoLoginCheckListener mListener) {
         String baseUrl = "";
@@ -232,7 +231,7 @@ public class LoginResultManager {
                 baseUrl = Api.FORMAL_SERVER_URL;
             }
             Api.getInstance(baseUrl)
-                    .autoLogin(LTAppID, LTToken, (int) LTTime, mAdID,2,requestBody)
+                    .autoLogin(LTAppID, LTToken, (int) LTTime, requestBody)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Observer<BaseEntry>() {
@@ -269,7 +268,6 @@ public class LoginResultManager {
      * 游客登录验证
      */
     public static void guestLogin(final Context context, boolean isTestServer, String LTAppID, String LTAppKey,
-                                  String mAdID,
                                   Map<String, Object> params, final OnLoginSuccessListener mListener) {
         String baseUrl = "";
         if (params != null &&
@@ -284,7 +282,7 @@ public class LoginResultManager {
             }
 
             Api.getInstance(baseUrl)
-                    .guestLogin(LTAppID, LTToken, (int) LTTime,mAdID,2, params)
+                    .guestLogin(LTAppID, LTToken, (int) LTTime, params)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Observer<BaseEntry<ResultData>>() {
@@ -309,6 +307,80 @@ public class LoginResultManager {
                                             baseEntry.setData(result.getData());
                                             baseEntry.setMsg(result.getMsg());
                                             mListener.onSuccess(baseEntry);
+                                        }
+                                        if (!TextUtils.isEmpty(result.getData().getApi_token())) {
+                                            PreferencesUtils.putString(context, Constants.USER_API_TOKEN,
+                                                    result.getData().getApi_token());
+                                        }
+                                        if (!TextUtils.isEmpty(result.getData().getLt_uid())) {
+                                            PreferencesUtils.putString(context, Constants.USER_LT_UID,
+                                                    result.getData().getLt_uid());
+                                        }
+                                        if (!TextUtils.isEmpty(result.getData().getLt_uid_token())) {
+                                            PreferencesUtils.putString(context, Constants.USER_LT_UID_TOKEN,
+                                                    result.getData().getLt_uid_token());
+                                        }
+                                    }
+
+                                } else {
+                                    if (mListener != null) {
+                                        mListener.onFailed(result.getMsg());
+                                    }
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            if (mListener != null) {
+                                mListener.onFailed(ExceptionHelper.handleException(e));
+                            }
+                        }
+
+                        @Override
+                        public void onComplete() {
+
+                        }
+                    });
+        }
+    }
+
+    /**
+     * 绑定账户
+     */
+    public static void bingAccount(final Context context, boolean isTestServer, String LTAppID, String LTAppKey,
+                                   Map<String, Object> params,
+                                   final OnLoginSuccessListener mListener) {
+        String baseUrl = "";
+        if (params != null &&
+                !TextUtils.isEmpty(LTAppID) &&
+                !TextUtils.isEmpty(LTAppKey)) {
+            long LTTime = System.currentTimeMillis() / 1000L;
+            String LTToken = MD5Util.md5Decode("POST" + LTAppID + LTTime + LTAppKey);
+
+            if (isTestServer) {
+                baseUrl = Api.TEST_SERVER_URL;
+            } else {
+                baseUrl = Api.FORMAL_SERVER_URL;
+            }
+
+            Api.getInstance(baseUrl)
+                    .bindAccount(LTAppID, LTToken, (int) LTTime, params)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Observer<BaseEntry<ResultData>>() {
+                        @Override
+                        public void onSubscribe(Disposable d) {
+
+                        }
+
+                        @Override
+                        public void onNext(BaseEntry<ResultData> result) {
+                            if (result != null) {
+                                if (result.getCode() == 200) {
+                                    if (result.getData() != null) {
+                                        if (mListener != null) {
+                                            mListener.onSuccess(result);
                                         }
                                         if (!TextUtils.isEmpty(result.getData().getApi_token())) {
                                             PreferencesUtils.putString(context, Constants.USER_API_TOKEN,
@@ -352,85 +424,9 @@ public class LoginResultManager {
     }
 
     /**
-     * 绑定账户
-     */
-    public static void bingAccount(final Context context, boolean isTestServer, String LTAppID, String LTAppKey,
-                                   String mAdID,
-                                   Map<String, Object> params,
-                                   final OnLoginSuccessListener mListener) {
-        String baseUrl = "";
-        if (params != null &&
-                !TextUtils.isEmpty(LTAppID) &&
-                !TextUtils.isEmpty(LTAppKey)) {
-            long LTTime = System.currentTimeMillis() / 1000L;
-            String LTToken = MD5Util.md5Decode("POST" + LTAppID + LTTime + LTAppKey);
-
-            if (isTestServer) {
-                baseUrl = Api.TEST_SERVER_URL;
-            } else {
-                baseUrl = Api.FORMAL_SERVER_URL;
-            }
-
-            Api.getInstance(baseUrl)
-                    .bindAccount(LTAppID, LTToken, (int) LTTime, mAdID,2,params)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Observer<BaseEntry<ResultData>>() {
-                        @Override
-                        public void onSubscribe(Disposable d) {
-
-                        }
-
-                        @Override
-                        public void onNext(BaseEntry<ResultData> result) {
-                            if (result != null) {
-                                if (result.getCode() == 200) {
-                                    if (result.getData() != null) {
-                                        if (mListener != null) {
-                                            mListener.onSuccess(result);
-                                        }
-                                        if (!TextUtils.isEmpty(result.getData().getApi_token())) {
-                                            PreferencesUtils.putString(context, Constants.USER_API_TOKEN,
-                                                    result.getData().getApi_token());
-                                        }
-                                        if (!TextUtils.isEmpty(result.getData().getLt_uid())) {
-                                            PreferencesUtils.putString(context, Constants.USER_LT_UID,
-                                                    result.getData().getLt_uid());
-                                        }
-                                        if (!TextUtils.isEmpty(result.getData().getLt_uid_token())) {
-                                            PreferencesUtils.putString(context, Constants.USER_LT_UID_TOKEN,
-                                                    result.getData().getLt_uid_token());
-                                        }
-                                    }
-
-                                } else {
-                                    if (mListener != null) {
-                                        mListener.onFailed(result.getMsg());
-                                    }
-                                }
-                            }
-                        }
-
-                        @Override
-                        public void onError(Throwable e) {
-                            if (mListener != null) {
-                                mListener.onFailed(ExceptionHelper.handleException(e));
-                            }
-                        }
-
-                        @Override
-                        public void onComplete() {
-
-                        }
-                    });
-        }
-    }
-
-    /**
      * 解绑
      */
     public static void unBingAccount(final Context context, boolean isTestServer, String LTAppID, String LTAppKey,
-                                     String mAdID,
                                      Map<String, String> params,
                                      final OnLoginSuccessListener mListener) {
         String baseUrl = "";
@@ -446,7 +442,7 @@ public class LoginResultManager {
                 baseUrl = Api.FORMAL_SERVER_URL;
             }
             Api.getInstance(baseUrl)
-                    .unBindAccount(LTAppID, LTToken, (int) LTTime,mAdID, 2,params)
+                    .unBindAccount(LTAppID, LTToken, (int) LTTime, params)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Observer<BaseEntry<ResultData>>() {
