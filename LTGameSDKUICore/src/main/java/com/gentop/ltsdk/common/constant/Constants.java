@@ -25,4 +25,15 @@ public class Constants {
     /***游客注册*/
     public static final int USER_REGISTER_GUEST_CODE = BASE_CODE + 22;
 
+    //Google支付
+    public static final String GOOGLE_RECHARGE_RESULT_CODE = "GOOGLE_RECHARGE_RESULT_CODE";
+    //Google支付
+    public static final String GOOGLE_RECHARGE_CODE = "GOOGLE_RECHARGE_CODE";
+    //Google登录
+    public static final String GOOGLE_LOGIN_CODE = "GOOGLE_LOGIN_CODE";
+    //Facebook登录
+    public static final String FB_LOGIN_CODE = "FB_LOGIN_CODE";
+    //游客登录
+    public static final String GUEST_LOGIN_CODE = "GUEST_LOGIN_CODE";
+
 }
